@@ -1,7 +1,12 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <ui:VisualElement name="LoadingTasks">
+        <uie:ObjectField label="Load Saved Tasks" name="savedTasksObjectField" />
+        <ui:Button tabindex="-1" text="Load Tasks" display-tooltip-when-elided="true" name="loadTasksButton" />
+    </ui:VisualElement>
     <ui:VisualElement name="AddingTasks">
-        <ui:TextField picking-mode="Ignore" label="Text Field" value="filler text" text="filler text" name="taskText" />
-        <ui:Button tabindex="-1" text="Button" display-tooltip-when-elided="true" name="addTaskButton" />
+        <ui:Label tabindex="-1" text="Add New Task" display-tooltip-when-elided="true" name="addTaskHeader" />
+        <ui:TextField picking-mode="Ignore" text="New Task" name="taskText" />
+        <ui:Button tabindex="-1" text="Add" display-tooltip-when-elided="true" name="addTaskButton" />
     </ui:VisualElement>
     <ui:VisualElement name="DisplayingTasks">
         <ui:ScrollView name="taskListScrollView" />

@@ -2,16 +2,20 @@ using UnityEngine;
 using UnityEditor;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
-using System;
+using System.Collections.Generic;
 
 namespace RainbowAssets.TaskList.Editor
 {
     public class TaskListEditor : EditorWindow
     {   
         VisualElement container;
+        ObjectField savedTasksObjectField;
+        Button loadTasksButton;
         TextField taskText;
         Button addTaskButton;
         ScrollView taskListScrollView;
+
+        TaskListSO currentTaskList;
 
         const string path = "Assets/Rainbow Assets/Task List/Editor/";
 
@@ -32,6 +36,12 @@ namespace RainbowAssets.TaskList.Editor
             StyleSheet styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(path + "TaskListEditor.uss");
             container.styleSheets.Add(styleSheet);
 
+            savedTasksObjectField = container.Q<ObjectField>("savedTasksObjectField");
+            savedTasksObjectField.objectType = typeof(TaskListSO);
+
+            loadTasksButton = container.Q<Button>("loadTasksButton");
+            loadTasksButton.clicked += LoadTasks;
+
             taskText = container.Q<TextField>("taskText");
             taskText.RegisterCallback<KeyDownEvent>(AddTask);
 
@@ -45,12 +55,17 @@ namespace RainbowAssets.TaskList.Editor
         {
             if(!string.IsNullOrEmpty(taskText.value))
             {
-                Toggle taskItem = new Toggle();
-                taskListScrollView.Add(taskItem);
-                taskItem.text = taskText.value;
+                taskListScrollView.Add(CreateTask(taskText.value));
                 taskText.value = "";
                 taskText.Focus();
             }
+        }
+
+        private Toggle CreateTask(string taskText)
+        {
+            Toggle taskItem = new Toggle();
+            taskItem.text = taskText;
+            return taskItem;
         }
 
         private void AddTask(KeyDownEvent e)
@@ -58,6 +73,22 @@ namespace RainbowAssets.TaskList.Editor
             if(Event.current.Equals(Event.KeyboardEvent("Return")))
             {
                 AddTask();
+            }
+        }
+
+        private void LoadTasks()
+        {
+            currentTaskList = savedTasksObjectField.value as TaskListSO;
+
+            if(currentTaskList != null)
+            {
+                taskListScrollView.Clear();
+                List<string> tasks = currentTaskList.GetTasks();
+
+                foreach(string task in tasks)
+                {
+                   taskListScrollView.Add(CreateTask(task));
+                }
             }
         }
     }   
