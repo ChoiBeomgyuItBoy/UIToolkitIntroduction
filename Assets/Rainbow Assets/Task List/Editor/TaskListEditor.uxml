@@ -5,7 +5,7 @@
     </ui:VisualElement>
     <ui:VisualElement name="AddingTasks">
         <ui:Label tabindex="-1" text="Add New Task" display-tooltip-when-elided="true" name="addTaskHeader" />
-        <ui:TextField picking-mode="Ignore" text="New Task" name="taskText" />
+        <ui:TextField picking-mode="Ignore" text="new Task..." name="taskText" />
         <ui:Button tabindex="-1" text="Add" display-tooltip-when-elided="true" name="addTaskButton" />
     </ui:VisualElement>
     <ui:VisualElement name="DisplayingTasks">

@@ -3,6 +3,7 @@ using UnityEditor;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
 using System.Collections.Generic;
+using System;
 
 namespace RainbowAssets.TaskList.Editor
 {
@@ -51,16 +52,6 @@ namespace RainbowAssets.TaskList.Editor
             taskListScrollView = container.Q<ScrollView>("taskListScrollView");
         }
 
-        private void AddTask()
-        {
-            if(!string.IsNullOrEmpty(taskText.value))
-            {
-                taskListScrollView.Add(CreateTask(taskText.value));
-                taskText.value = "";
-                taskText.Focus();
-            }
-        }
-
         private Toggle CreateTask(string taskText)
         {
             Toggle taskItem = new Toggle();
@@ -74,6 +65,25 @@ namespace RainbowAssets.TaskList.Editor
             {
                 AddTask();
             }
+        }
+        
+        private void AddTask()
+        {
+            if(!string.IsNullOrEmpty(taskText.value))
+            {
+                taskListScrollView.Add(CreateTask(taskText.value));
+                SaveTask(taskText.value);
+                taskText.value = "";
+                taskText.Focus();
+            }
+        }
+
+        private void SaveTask(string task)
+        {
+            currentTaskList.AddTask(task);
+            EditorUtility.SetDirty(currentTaskList);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
         }
 
         private void LoadTasks()
