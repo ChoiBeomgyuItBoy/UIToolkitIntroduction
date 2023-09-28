@@ -19,6 +19,7 @@ namespace RainbowAssets.TaskList.Editor
         TaskListSO currentTaskList;
         Button saveProgressButton;
         ProgressBar taskProgressBar;
+        ToolbarSearchField searchBox;
 
         const string path = "Assets/Rainbow Assets/Task List/Editor/";
 
@@ -57,6 +58,9 @@ namespace RainbowAssets.TaskList.Editor
             saveProgressButton.clicked += SaveProgress;
 
             taskProgressBar = container.Q<ProgressBar>("taskProgressBar");
+
+            searchBox = container.Q<ToolbarSearchField>("searchBox");
+            searchBox.RegisterValueChangedCallback(OnSearchTextChanged);
         }
 
         private Toggle CreateTask(string taskText)
@@ -77,6 +81,11 @@ namespace RainbowAssets.TaskList.Editor
         
         private void AddTask()
         {
+            if(currentTaskList == null)
+            {
+                return;
+            }
+
             if(!string.IsNullOrEmpty(taskText.value))
             {
                 taskListScrollView.Add(CreateTask(taskText.value));
@@ -89,6 +98,11 @@ namespace RainbowAssets.TaskList.Editor
 
         private void SaveTask(string task)
         {
+            if(currentTaskList == null)
+            {
+                return;
+            }
+
             currentTaskList.AddTask(task);
             EditorUtility.SetDirty(currentTaskList);
             AssetDatabase.SaveAssets();
@@ -99,76 +113,107 @@ namespace RainbowAssets.TaskList.Editor
         {
             currentTaskList = savedTasksObjectField.value as TaskListSO;
 
-            if(currentTaskList != null)
+            if(currentTaskList == null)
             {
-                taskListScrollView.Clear();
-                List<string> tasks = currentTaskList.GetTasks();
-
-                foreach(string task in tasks)
-                {
-                   taskListScrollView.Add(CreateTask(task));
-                }
-
-                UpdateProgress();
+                return;
             }
+
+            taskListScrollView.Clear();
+            List<string> tasks = currentTaskList.GetTasks();
+
+            foreach(string task in tasks)
+            {
+                taskListScrollView.Add(CreateTask(task));
+            }
+
+            UpdateProgress();
         }
 
         private void SaveProgress()
         {
-            if(currentTaskList != null)
+            if(currentTaskList == null)
             {
-                List<string> tasks = new List<string>();
-
-                foreach(Toggle task in taskListScrollView.Children())
-                {
-                    if(!task.value)
-                    {
-                        tasks.Add(task.text);
-                    }
-                }
-
-                currentTaskList.AddTasks(tasks);
-                EditorUtility.SetDirty(currentTaskList);
-                AssetDatabase.SaveAssets();
-                AssetDatabase.Refresh();
-                LoadTasks();
+                return;
             }
+
+            List<string> tasks = new List<string>();
+
+            foreach(Toggle task in taskListScrollView.Children())
+            {
+                if(!task.value)
+                {
+                    tasks.Add(task.text);
+                }
+            }
+
+            currentTaskList.AddTasks(tasks);
+            EditorUtility.SetDirty(currentTaskList);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+            LoadTasks();
+
         }
 
         private void UpdateProgress()
         {
-            if(currentTaskList != null)
+            if(currentTaskList == null)
             {
-                int count = 0;
-                int completed = 0;
+                return;
+            }
 
-                foreach(Toggle task in taskListScrollView.Children())
+            int count = 0;
+            int completed = 0;
+
+            foreach(Toggle task in taskListScrollView.Children())
+            {
+                if(task.value)
                 {
-                    if(task.value)
-                    {
-                        completed++;
-                    }
-
-                    count++;
+                    completed++;
                 }
 
-                if(count > 0)
-                {
-                    float progress = completed / (float) count;
-                    taskProgressBar.value = progress;
-                    taskProgressBar.title = $"{Mathf.Round(progress * 1000) / 10f}%";
-                }
-                else
-                {
-                    taskProgressBar.value = 1;
-                    taskProgressBar.title = $"{100}%";
-                }
+                count++;
+            }
+
+            if(count > 0)
+            {
+                float progress = completed / (float) count;
+                taskProgressBar.value = progress;
+                taskProgressBar.title = $"{Mathf.Round(progress * 1000) / 10f}%";
+            }
+            else
+            {
+                taskProgressBar.value = 1;
+                taskProgressBar.title = $"{100}%";
             }
         }
 
         private void UpdateProgress(ChangeEvent<bool> evt)
         {
             UpdateProgress();
+        }
+
+        private void OnSearchTextChanged(ChangeEvent<string> evt)
+        {
+            if(currentTaskList == null)
+            {
+                return;
+            }
+
+            string searchText = evt.newValue.ToUpper();
+
+            foreach(Toggle task in taskListScrollView.Children())
+            {
+                string taskText = task.text.ToUpper();
+
+                if(!string.IsNullOrEmpty(searchText) && taskText.Contains(searchText))
+                {
+                    task.AddToClassList("highlight");
+                }
+                else
+                {
+                    task.RemoveFromClassList("highlight");
+                }
+            }
         }
     }   
 }
