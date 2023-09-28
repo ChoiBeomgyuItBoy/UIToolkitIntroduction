@@ -1,0 +1,9 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement name="AddingTasks">
+        <ui:TextField picking-mode="Ignore" label="Text Field" value="filler text" text="filler text" name="taskText" />
+        <ui:Button tabindex="-1" text="Button" display-tooltip-when-elided="true" name="addTaskButton" />
+    </ui:VisualElement>
+    <ui:VisualElement name="DisplayingTasks">
+        <ui:ScrollView name="taskListScrollView" />
+    </ui:VisualElement>
+</ui:UXML>
