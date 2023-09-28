@@ -1,14 +1,23 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
-    <ui:VisualElement name="LoadingTasks">
+    <Style src="project://database/Assets/Rainbow%20Assets/Task%20List/Editor/TaskListEditor.uss?fileID=7433441132597879392&amp;guid=6b2b6bb5fa49c6841a77ec262d3fe072&amp;type=3#TaskListEditor" />
+    <ui:VisualElement name="LoadingTasks" class="container">
         <uie:ObjectField label="Load Saved Tasks" name="savedTasksObjectField" />
-        <ui:Button tabindex="-1" text="Load Tasks" display-tooltip-when-elided="true" name="loadTasksButton" />
+        <ui:Button tabindex="-1" text="Load Tasks" display-tooltip-when-elided="true" name="loadTasksButton" class="button" />
     </ui:VisualElement>
-    <ui:VisualElement name="AddingTasks">
-        <ui:Label tabindex="-1" text="Add New Task" display-tooltip-when-elided="true" name="addTaskHeader" />
-        <ui:TextField picking-mode="Ignore" text="new Task..." name="taskText" />
-        <ui:Button tabindex="-1" text="Add" display-tooltip-when-elided="true" name="addTaskButton" />
+    <ui:VisualElement name="AddingTasks" class="container">
+        <ui:Label tabindex="-1" text="Add New Task" display-tooltip-when-elided="true" name="addTaskHeader" class="header" />
+        <ui:VisualElement name="addTaskContainer" style="flex-direction: row;">
+            <ui:TextField picking-mode="Ignore" text="new task..." name="taskText" is-delayed="true" style="width: 80%;" />
+            <ui:Button tabindex="-1" text="Add" display-tooltip-when-elided="true" name="addTaskButton" class="background" style="width: 20%; padding-left: 1%; padding-right: 1%; padding-top: 1%; padding-bottom: 1%; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0;" />
+        </ui:VisualElement>
     </ui:VisualElement>
-    <ui:VisualElement name="DisplayingTasks">
-        <ui:ScrollView name="taskListScrollView" />
+    <ui:VisualElement name="DisplayingTasks" class="container expand">
+        <ui:Label tabindex="-1" text="Current Tasks" display-tooltip-when-elided="true" name="taskListHeader" class="header" />
+        <ui:ScrollView name="taskListScrollView" class="border" />
+    </ui:VisualElement>
+    <ui:VisualElement name="TrackingTasks" class="container">
+        <ui:Button tabindex="-1" text="Save Progress" display-tooltip-when-elided="true" name="saveProgressButton" class="button" />
+        <ui:Label tabindex="-1" text="Progress" display-tooltip-when-elided="true" name="progressHeader" class="header" style="margin-left: 0; margin-right: 0; margin-top: 5%; margin-bottom: 0;" />
+        <ui:ProgressBar title="my-progress" name="tasksProgressBar" />
     </ui:VisualElement>
 </ui:UXML>
