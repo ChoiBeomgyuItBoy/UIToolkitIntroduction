@@ -3,7 +3,6 @@ using UnityEditor;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
 using System.Collections.Generic;
-using System;
 
 namespace RainbowAssets.TaskList.Editor
 {
@@ -15,8 +14,8 @@ namespace RainbowAssets.TaskList.Editor
         TextField taskText;
         Button addTaskButton;
         ScrollView taskListScrollView;
-
         TaskListSO currentTaskList;
+        Button saveProgressButton;
 
         const string path = "Assets/Rainbow Assets/Task List/Editor/";
 
@@ -50,6 +49,9 @@ namespace RainbowAssets.TaskList.Editor
             addTaskButton.clicked += AddTask;
 
             taskListScrollView = container.Q<ScrollView>("taskListScrollView");
+
+            saveProgressButton = container.Q<Button>("saveProgressButton");
+            saveProgressButton.clicked += SaveProgress;
         }
 
         private Toggle CreateTask(string taskText)
@@ -99,6 +101,28 @@ namespace RainbowAssets.TaskList.Editor
                 {
                    taskListScrollView.Add(CreateTask(task));
                 }
+            }
+        }
+
+        private void SaveProgress()
+        {
+            if(currentTaskList != null)
+            {
+                List<string> tasks = new List<string>();
+
+                foreach(Toggle task in taskListScrollView.Children())
+                {
+                    if(!task.value)
+                    {
+                        tasks.Add(task.text);
+                    }
+                }
+
+                currentTaskList.AddTasks(tasks);
+                EditorUtility.SetDirty(currentTaskList);
+                AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
+                LoadTasks();
             }
         }
     }   
