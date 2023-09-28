@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: Task List
   m_EditorClassIdentifier: 
   tasks:
-  - Create Weapon
-  - Create tooltips
   - 'State Machine Editor Window                                          '
   - Swords
   - Heriarchy
+  - dfsfdsfsfd

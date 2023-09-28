@@ -3,6 +3,8 @@ using UnityEditor;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
 using System.Collections.Generic;
+using System.Net.NetworkInformation;
+using System;
 
 namespace RainbowAssets.TaskList.Editor
 {
@@ -16,6 +18,7 @@ namespace RainbowAssets.TaskList.Editor
         ScrollView taskListScrollView;
         TaskListSO currentTaskList;
         Button saveProgressButton;
+        ProgressBar taskProgressBar;
 
         const string path = "Assets/Rainbow Assets/Task List/Editor/";
 
@@ -52,16 +55,19 @@ namespace RainbowAssets.TaskList.Editor
 
             saveProgressButton = container.Q<Button>("saveProgressButton");
             saveProgressButton.clicked += SaveProgress;
+
+            taskProgressBar = container.Q<ProgressBar>("taskProgressBar");
         }
 
         private Toggle CreateTask(string taskText)
         {
             Toggle taskItem = new Toggle();
             taskItem.text = taskText;
+            taskItem.RegisterValueChangedCallback(UpdateProgress);
             return taskItem;
         }
 
-        private void AddTask(KeyDownEvent e)
+        private void AddTask(KeyDownEvent evt)
         {
             if(Event.current.Equals(Event.KeyboardEvent("Return")))
             {
@@ -77,6 +83,7 @@ namespace RainbowAssets.TaskList.Editor
                 SaveTask(taskText.value);
                 taskText.value = "";
                 taskText.Focus();
+                UpdateProgress();
             }
         }
 
@@ -101,6 +108,8 @@ namespace RainbowAssets.TaskList.Editor
                 {
                    taskListScrollView.Add(CreateTask(task));
                 }
+
+                UpdateProgress();
             }
         }
 
@@ -124,6 +133,42 @@ namespace RainbowAssets.TaskList.Editor
                 AssetDatabase.Refresh();
                 LoadTasks();
             }
+        }
+
+        private void UpdateProgress()
+        {
+            if(currentTaskList != null)
+            {
+                int count = 0;
+                int completed = 0;
+
+                foreach(Toggle task in taskListScrollView.Children())
+                {
+                    if(task.value)
+                    {
+                        completed++;
+                    }
+
+                    count++;
+                }
+
+                if(count > 0)
+                {
+                    float progress = completed / (float) count;
+                    taskProgressBar.value = progress;
+                    taskProgressBar.title = $"{Mathf.Round(progress * 1000) / 10f}%";
+                }
+                else
+                {
+                    taskProgressBar.value = 1;
+                    taskProgressBar.title = $"{100}%";
+                }
+            }
+        }
+
+        private void UpdateProgress(ChangeEvent<bool> evt)
+        {
+            UpdateProgress();
         }
     }   
 }
