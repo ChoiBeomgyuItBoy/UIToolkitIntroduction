@@ -27,10 +27,10 @@
     border-right-width: 1px;
     border-top-width: 1px;
     border-bottom-width: 1px;
-    border-left-color: rgba(190, 167, 96, 255);
-    border-right-color: rgba(190, 167, 96, 255);
-    border-top-color: rgba(190, 167, 96, 255);
-    border-bottom-color: rgba(190, 167, 96, 255);
+    border-left-color: rgb(81, 126, 81);
+    border-right-color: rgb(81, 126, 81);
+    border-top-color: rgb(81, 126, 81);
+    border-bottom-color: rgb(81, 126, 81);
     border-top-left-radius: 3px;
     border-bottom-left-radius: 3px;
     border-top-right-radius: 3px;
@@ -38,5 +38,9 @@
 }
 
 .background {
-    background-color: rgb(165, 146, 89);
+    background-color: rgb(81, 126, 81);
+}
+
+.highlight {
+    color: rgba(255, 243, 0, 255);
 }

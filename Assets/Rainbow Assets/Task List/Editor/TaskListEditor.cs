@@ -21,7 +21,7 @@ namespace RainbowAssets.TaskList.Editor
         ProgressBar taskProgressBar;
         ToolbarSearchField searchBox;
 
-        const string path = "Assets/Rainbow Assets/Task List/Editor/";
+        public const string path = "Assets/Rainbow Assets/Task List/Editor/";
 
         [MenuItem("Rainbow Assets/Task List Editor")]
         public static void OpenWindow()
@@ -63,11 +63,10 @@ namespace RainbowAssets.TaskList.Editor
             searchBox.RegisterValueChangedCallback(OnSearchTextChanged);
         }
 
-        private Toggle CreateTask(string taskText)
+        private TaskItem CreateTask(string taskText)
         {
-            Toggle taskItem = new Toggle();
-            taskItem.text = taskText;
-            taskItem.RegisterValueChangedCallback(UpdateProgress);
+            TaskItem taskItem = new TaskItem(taskText);
+            taskItem.GetTaskToggle().RegisterValueChangedCallback(UpdateProgress);
             return taskItem;
         }
 
@@ -138,11 +137,11 @@ namespace RainbowAssets.TaskList.Editor
 
             List<string> tasks = new List<string>();
 
-            foreach(Toggle task in taskListScrollView.Children())
+            foreach(TaskItem task in taskListScrollView.Children())
             {
-                if(!task.value)
+                if(!task.GetTaskToggle().value)
                 {
-                    tasks.Add(task.text);
+                    tasks.Add(task.GetTaskLabel().text);
                 }
             }
 
@@ -164,9 +163,9 @@ namespace RainbowAssets.TaskList.Editor
             int count = 0;
             int completed = 0;
 
-            foreach(Toggle task in taskListScrollView.Children())
+            foreach(TaskItem task in taskListScrollView.Children())
             {
-                if(task.value)
+                if(task.GetTaskToggle().value)
                 {
                     completed++;
                 }
@@ -201,17 +200,17 @@ namespace RainbowAssets.TaskList.Editor
 
             string searchText = evt.newValue.ToUpper();
 
-            foreach(Toggle task in taskListScrollView.Children())
+            foreach(TaskItem task in taskListScrollView.Children())
             {
-                string taskText = task.text.ToUpper();
+                string taskText = task.GetTaskLabel().text.ToUpper();
 
                 if(!string.IsNullOrEmpty(searchText) && taskText.Contains(searchText))
                 {
-                    task.AddToClassList("highlight");
+                    task.GetTaskLabel().AddToClassList("highlight");
                 }
                 else
                 {
-                    task.RemoveFromClassList("highlight");
+                    task.GetTaskLabel().RemoveFromClassList("highlight");
                 }
             }
         }

@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="taskItem" style="flex-direction: row;">
+        <ui:Toggle name="taskToggle" />
+        <ui:Label tabindex="-1" text="Label" display-tooltip-when-elided="true" name="taskLabel" />
+    </ui:VisualElement>
+</ui:UXML>
