@@ -44,3 +44,12 @@
 .highlight {
     color: rgba(255, 243, 0, 255);
 }
+
+.notification {
+    -unity-text-align: upper-center;
+    font-size: 10px;
+    padding-left: 1%;
+    padding-right: 1%;
+    padding-top: 1%;
+    padding-bottom: 1%;
+}

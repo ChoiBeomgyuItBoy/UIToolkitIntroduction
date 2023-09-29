@@ -3,8 +3,6 @@ using UnityEditor;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
 using System.Collections.Generic;
-using System.Net.NetworkInformation;
-using System;
 
 namespace RainbowAssets.TaskList.Editor
 {
@@ -20,6 +18,7 @@ namespace RainbowAssets.TaskList.Editor
         Button saveProgressButton;
         ProgressBar taskProgressBar;
         ToolbarSearchField searchBox;
+        Label notificationLabel;
 
         public const string path = "Assets/Rainbow Assets/Task List/Editor/";
 
@@ -61,6 +60,10 @@ namespace RainbowAssets.TaskList.Editor
 
             searchBox = container.Q<ToolbarSearchField>("searchBox");
             searchBox.RegisterValueChangedCallback(OnSearchTextChanged);
+            
+            notificationLabel = container.Q<Label>("notificationLabel");
+
+            UpdateNotifications("Please load a task list to continue.");
         }
 
         private TaskItem CreateTask(string taskText)
@@ -92,6 +95,7 @@ namespace RainbowAssets.TaskList.Editor
                 taskText.value = "";
                 taskText.Focus();
                 UpdateProgress();
+                UpdateNotifications("Task added successfully.");
             }
         }
 
@@ -106,6 +110,7 @@ namespace RainbowAssets.TaskList.Editor
             EditorUtility.SetDirty(currentTaskList);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
+            UpdateNotifications("Task added successfully.");
         }
 
         private void LoadTasks()
@@ -114,6 +119,7 @@ namespace RainbowAssets.TaskList.Editor
 
             if(currentTaskList == null)
             {
+                UpdateNotifications("Failed to load task list.");
                 return;
             }
 
@@ -126,6 +132,7 @@ namespace RainbowAssets.TaskList.Editor
             }
 
             UpdateProgress();
+            UpdateNotifications($"{currentTaskList.name} sucessfully loaded.");
         }
 
         private void SaveProgress()
@@ -150,7 +157,7 @@ namespace RainbowAssets.TaskList.Editor
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
             LoadTasks();
-
+            UpdateNotifications("Progress saved succesfully.");
         }
 
         private void UpdateProgress()
@@ -178,6 +185,7 @@ namespace RainbowAssets.TaskList.Editor
                 float progress = completed / (float) count;
                 taskProgressBar.value = progress;
                 taskProgressBar.title = $"{Mathf.Round(progress * 1000) / 10f}%";
+                UpdateNotifications("Progress updated. Don't forget to save!");
             }
             else
             {
@@ -212,6 +220,14 @@ namespace RainbowAssets.TaskList.Editor
                 {
                     task.GetTaskLabel().RemoveFromClassList("highlight");
                 }
+            }
+        }
+
+        private void UpdateNotifications(string text)
+        {
+            if(!string.IsNullOrEmpty(text))
+            {
+                notificationLabel.text = text;
             }
         }
     }   

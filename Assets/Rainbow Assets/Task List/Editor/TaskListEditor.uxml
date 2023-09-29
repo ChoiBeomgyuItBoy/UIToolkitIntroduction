@@ -6,7 +6,7 @@
     </ui:VisualElement>
     <ui:VisualElement name="SearchingTasks" class="container">
         <ui:Label tabindex="-1" text="Search" display-tooltip-when-elided="true" name="searchHeader" class="header" />
-        <uie:ToolbarSearchField focusable="true" name="searchBox" />
+        <uie:ToolbarSearchField focusable="true" name="searchBox" style="width: auto;" />
     </ui:VisualElement>
     <ui:VisualElement name="AddingTasks" class="container">
         <ui:Label tabindex="-1" text="Add New Task" display-tooltip-when-elided="true" name="addTaskHeader" class="header" />
@@ -23,5 +23,8 @@
         <ui:Button tabindex="-1" text="Save Progress" display-tooltip-when-elided="true" name="saveProgressButton" class="button" />
         <ui:Label tabindex="-1" text="Progress" display-tooltip-when-elided="true" name="progressHeader" class="header" style="margin-left: 0; margin-right: 0; margin-top: 5%; margin-bottom: 0;" />
         <ui:ProgressBar title="---%" name="taskProgressBar" high-value="1" />
+    </ui:VisualElement>
+    <ui:VisualElement name="Notifications" class="container">
+        <ui:Label tabindex="-1" text="Test notification" display-tooltip-when-elided="true" name="notificationLabel" class="border notification" />
     </ui:VisualElement>
 </ui:UXML>
